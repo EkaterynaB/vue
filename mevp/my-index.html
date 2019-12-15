@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <title>My experience 1</title>
+  <script type="text/javascript" src="vue.js"></script>
+</head>
+<body>
+<div id="app">
+  <div class="container1">
+    <h3>List</h3>
+    <ul>
+      <li v-for="{id, title} in list" :key="id">
+        <item :item="{id, title}" v-on:remove-item="removeItem($event)" />
+      </li>
+    </ul>
+  </div>
+  <hr />
+  <div class="container2">
+    <div class="textarea">
+      <h3>Textarea</h3>
+      <textarea v-model="textarea" cols="30" rows="10"></textarea>
+      <p>You have wrote: {{ textarea }}</p>
+    </div>
+    <div class="select">
+      <h3>Select</h3>
+      <select v-model="selectedRadio">
+        <option :value="fruit" v-for="fruit in radio">{{ fruit }}</option>
+      </select>
+      <p>You have selected111: {{ selectedRadio | capitalize }}</p>
+    </div>
+    <div class="radio">
+      <h3>Radio</h3>
+      <p v-for="fruit in radio" :key="fruit">
+        <input v-model="selectedRadio" name="fruit" :id="fruit" type="radio" :value="fruit" /><label :for="fruit">{{ fruit }}</label>
+      </p>
+      <p>You have wrote: {{ selectedRadio }} 222 {{ reverse }}</p>
+    </div>
+  </div>
+  <div class="container3">
+    <p>
+      First name: <input type="text" v-model="firstName">
+    </p>
+    <p>
+      Last Name: <input type="text" v-model="lastName">
+    </p>
+    <p>Full Name <input type="text" v-model="fullName"></p>
+  </div>
+</div>
+<script>
+  Vue.component('item', {
+    props: ['item'],
+    data: () => ({
+      count: 0
+    }),
+    template: `<div>
+          <div>{{ item.id }} !!! Count: {{ count }}</div>
+          <span>{{ item.title }}</span>
+          <button @click="removeItemF"> X </button>
+          <button @click="++count">Increase count</button>
+        </div>`,
+    methods: {
+      removeItemF() {
+        console.log('this.item.id', this.item.id);
+        this.$emit('remove-item', this.item.id);
+      }
+    }
+  });
+
+  const vApp = new Vue({
+    el: "#app",
+    data: {
+      list: [
+        {id: 1, title: "Title 1"},
+        {id: 2, title: "Title 2"},
+        {id: 3, title: "Title 3"}],
+      textarea: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolorum ea minima optio porro quam quod ut? Animi at aut, blanditiis dolor error magnam maxime neque nihil praesentium quas tempora veritatis!',
+      radio: ['orange', 'apple', 'peach', 'banana'],
+      selectedRadio: 'peach',
+      firstName: '',
+      lastName: ''
+    },
+    filters: {
+      capitalize(text) {
+        return text[0].toUpperCase() + text.slice(1);
+      }
+    },
+    computed: {
+      reverse() {
+        return this.selectedRadio.split('').reverse().join('');
+      },
+      fullName: {
+        get() {
+          return `${this.firstName} ${this.lastName}`;
+        },
+        set(value) {
+          [this.firstName, this.lastName] = value.split(' ');
+        }
+      }
+    },
+    methods: {
+      removeItem(id) {
+        this.list = this.list.filter(item => item.id !== id);
+      },
+    }
+  });
+</script>
+</body>
+</html>

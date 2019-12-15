@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Sync</title>
+  <script type='text/javascript' src='vue.js'></script>
+  <style>
+    .child-3,
+    .child-2,
+    .child-1 {
+      border: 2px solid blue;
+      border-radius: 2px;
+      padding: 10px 20px;
+      margin: 10px 0;
+    }
+    .child-2 {
+      border-color: green;
+    }
+    .child-3 {
+      border-color: pink;
+    }
+    .input-text {
+      font-size: 14px;
+      padding: 10px;
+      min-width: 300px;
+    }
+  </style>
+</head>
+<body>
+<div id="app">
+  <div>
+    <h1 id="title">{{ title }}</h1>
+    <child >
+      <template slot-scope="obj">
+      Lorem ipsum dolor sit amet,
+      consectetur adipisicing elit. At eius excepturi ipsum numquam
+      quos velit vero voluptatibus. Atque consequuntur corporis doloribus ducimus,
+      ex incidunt labore magnam nisi nulla praesentium, quis.
+      {{ obj.title }}
+      </template>
+    </child>
+  <child-list :list="list">
+    <template slot-scope="obj">
+      <li>Label: {{ obj.label }} content: {{ obj.content}} </li>
+    </template>
+  </child-list>
+</div>
+</div>
+<script>
+  const child = Vue.component('child', {
+    data() {
+      return {
+        title: '****Child Component Title***'
+      }
+    },
+    template: `<div class="child-1">
+                <h1>Child Component 1 Slot - Scope</h1>
+                <p>Some child component text</p>
+                <p>Some child component text</p>
+                <p>Some child component text</p>
+                <slot :title="title"></slot>
+              </div>`,
+  });
+
+  const childList = Vue.component('child-list', {
+    props: ['list'],
+    data() {
+      return {
+        title: '**** Child Component 2 Slot-Scope-List***'
+      }
+    },
+    template: `<div class="child-1">
+                <h1> {{ title }}</h1>
+                <ul>
+                 <slot v-for="item in list"
+                  :label="item.label"
+                  :content="item.content"
+                  ></slot>
+                </ul>
+              </div>`,
+  });
+
+
+  const app = new Vue({
+    el: '#app',
+    data: {
+      title: 'Parent Title text',
+      list: [
+        {
+          label: 'Label 1',
+          content: 'Lorem 1 ipsum dolor sit amet, consectetur adipisicing elit.'
+        },
+        {
+          label: 'Label 2',
+          content: 'Lorem 2 ipsum dolor sit amet, consectetur adipisicing elit.'
+        },
+        {
+          label: 'Label 3',
+          content: 'Lorem 3 ipsum dolor sit amet, consectetur adipisicing elit.'
+        },
+        {
+          label: 'Label 4',
+          content: 'Lorem 4 ipsum dolor sit amet, consectetur adipisicing elit.'
+        }
+      ]
+    },
+  })
+</script>
+</body>
+</html>

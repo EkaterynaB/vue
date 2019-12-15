@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Carculate value</title>
+  <script type="text/javascript" src="./vue.js"></script>
+</head>
+<body>
+<div id="app">
+  <div>
+    <h1>Parent DIV</h1>
+    {{ price }}<input-block label="Price" v-model="price"></input-block>
+    {{ shipping }}<input-block label="Shipping" v-model="shipping"></input-block>
+    {{ discount }}<input-block label="Discount" v-model="discount"></input-block>
+    <div>Total:{{ total }}</div>
+  </div>
+</div>
+<script>
+  const vueComp = Vue.component('input-block',{
+    template: `<div>
+    <label for="label">
+    {{ label }}:</label>
+    <input :id="label" type="number" :value="initialValue" @input="change($event.target.value)"/>
+  </div>`,
+    props: ['label', 'initialValue'],
+    methods: {
+      change(event) {
+        console.log({event});
+        return this.$emit('input', event);
+      }
+    }
+  });
+
+  const vue = new Vue({
+    el: '#app',
+    data: {
+      price: 0,
+      shipping: 0,
+      discount: 0,
+    },
+    computed: {
+      total() {
+        console.log(this.price, this.shipping, this.discount);
+        this.price = Number(this.price);
+        this.shipping = Number(this.shipping);
+        this.discount = Number(this.discount);
+        return this.price + this.shipping - this.discount;
+      }
+    }
+  })
+</script>
+</body>
+</html>

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Sync</title>
+  <script type='text/javascript' src='vue.js'></script>
+  <style>
+    .child-3,
+    .child-2,
+    .child-1 {
+      border: 2px solid blue;
+      border-radius: 2px;
+      padding: 10px 20px;
+      margin: 10px 0;
+    }
+    .child-2 {
+      border-color: green;
+    }
+    .child-3 {
+      border-color: pink;
+    }
+    .input-text {
+      font-size: 14px;
+      padding: 10px;
+      min-width: 300px;
+    }
+  </style>
+</head>
+<body>
+<div id="app">
+  <div>
+    <h1 id="title">{{ title }}</h1>
+    <child :title="title" @change-input="onInput"></child>
+    *** Custom Input ***
+    <custom-input v-model="title"></custom-input>
+    *** .SYNC modifier ***
+    <sync-modifier :my_prop.sync="title"></sync-modifier>
+  </div>
+</div>
+<script>
+  const child = Vue.component('child', {
+    props: ['title'],
+    template: `<div class="child-1">
+                Title (parent): {{ title }}
+                <p>You can change the value that gets from parent component not changing the parent value</p>
+                <p><input class="input-text" :value="title" type="text" @input="onInput($event.target.value)"></p>
+              </div>`,
+    methods: {
+      onInput(v) {
+        this.$emit('change-input', v);
+      }
+    }
+  });
+
+  const custom = Vue.component('custom-input', {
+    props: ['title'],
+    model: {
+      prop: 'title',
+      event: 'my-event'
+    },
+    template: `<div class="child-2">
+                  <h3>This custom input: {{ title }}</h3>
+                  Label:<input
+                  class="input-text"
+                  :value="title"
+                  @input="$emit('my-event', $event.target.value)"
+                >
+            </div>`
+  });
+
+  const sync = Vue.component('sync-modifier', {
+    props: ['my_prop'],
+    template: `<div class="child-3">
+                {{ my_prop }}
+                <p><input class="input-text" :value="my_prop" @input="$emit('update:my_prop', $event.target.value)" ></p>
+                </div>`,
+  });
+
+  const app = new Vue({
+    el: '#app',
+    data: {
+      title: 'Parent Title text',
+      title2: 'Parent Title text'
+    },
+    methods: {
+      onInput(title) {
+        this.title = title;
+      }
+    }
+  })
+</script>
+</body>
+</html>

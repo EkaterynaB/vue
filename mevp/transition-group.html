@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Sync</title>
+  <script type='text/javascript' src='vue.js'></script>
+  <style>
+    .fade-enter, .fade-leave-to {transform: translateY(5px); opacity: 0 }
+    .fade-enter-active, .fade-leave-active { transition: all 1.5s ease}
+  </style>
+</head>
+<body>
+<div id="app">
+  <ul>
+  <transition-group name="fade">
+      <li v-for="item in list" :key="item">{{ item }}</li>
+  </transition-group>
+  </ul>
+  <input type="text" v-model="item">
+  <button @click="addItem">Add item</button>
+  <button @click="removeItem">Remove item</button>
+</div>
+<script>
+  const app = new Vue({
+    el: '#app',
+    data: {
+      list: [],
+      item: ''
+    },
+    methods: {
+      addItem() {
+        this.list.push(this.item);
+        this.item = '';
+      },
+      removeItem() {
+        this.list.pop();
+        this.item = ''
+      }
+    }
+  })
+</script>
+</body>
+</html>

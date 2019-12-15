@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Sync</title>
+  <script type='text/javascript' src='vue.js'></script>
+  <style>
+    .fade-enter-active, .fade-leave-active {
+      transition: opacity 5s;
+    }
+    .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+      opacity: 0;
+    }
+    .slide-fade-enter-active {
+      transition: all 13s ease;
+    }
+    .slide-fade-leave-active {
+      transition: all .8s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+    }
+    .slide-fade-enter, .slide-fade-leave-to
+      /* .slide-fade-leave-active below version 2.1.8 */ {
+      transform: translateX(10px);
+      opacity: 0;
+    }
+    .opacity-enter { transform: translateX(10px); opacity: 0;}
+    .opacity-enter-active { transition: all .3s ease}
+    .opacity-leave {transform: translateX(10px);opacity: 0;}
+    .opacity-leave-active { transition: all .3s ease}
+  </style>
+</head>
+<body>
+<div id="app">
+  <div>
+    <transition name="opacity" mode="out-in">
+      <div v-if="show" key="q" >
+        <p>Never give up! Kate, you can do what ever you want</p>
+      </div>
+      <div v-if="!show" key="w">
+        <p>What ever they tell, you know what you need</p>
+      </div>
+    </transition>
+    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Commodi earum error fugiat molestias, nemo vitae. Aliquam consequatur culpa dignissimos distinctio, eveniet harum id maxime minima omnis possimus quisquam, sit totam?</p>
+  </div>
+  <div id="demo">
+    <button @click="show = !show">
+      Toggle
+    </button>
+    <transition name="fade">
+      <p v-if="show">hello</p>
+    </transition>
+  </div>
+  <div id="example-1">
+    <transition name="slide-fade">
+
+      <div v-if="show">
+        <hr />
+        <h2>I know what you want</h2>
+        <p>hello</p>
+      </div>
+    </transition>
+  </div>
+
+</div>
+<script>
+  const app = new Vue({
+    el: '#app',
+    data: {
+      show: true,
+    },
+  })
+</script>
+</body>
+</html>

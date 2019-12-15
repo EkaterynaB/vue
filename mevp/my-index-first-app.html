@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>input control</title>
+  <script type="text/javascript" src="vue.js"></script>
+  <style>
+    .redBoard {
+      border-color: red;
+    }
+  </style>
+</head>
+<body>
+<div id="app">
+  <input :class="{redBoard: remain === 0}" type="text" v-model="inputValue" @input.check="check" /> {{ remain }}/{{maxValue}}
+</div>
+<script>
+  const vApp = new Vue({
+    el: '#app',
+    data: {
+      inputValue: 'aas',
+      maxValue: 9,
+    },
+    methods: {
+      check() {
+        this.inputValue = this.inputValue.slice(0, this.maxValue);
+      }
+    },
+    computed: {
+      remain() {
+        return this.maxValue - this.inputValue.length;
+      }
+    }
+  })
+</script>
+</body>
+</html>
